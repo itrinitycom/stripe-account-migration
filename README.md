@@ -37,6 +37,9 @@ yarn start copy-coupons 'path/to/coupons.csv' SOURCE_API_KEY TARGET_API_KEY
 # copy promotion codes
 yarn start copy-promotion-codes 'path/to/coupons.csv' 'path/to/promotion-codes.csv' SOURCE_API_KEY TARGET_API_KEY
 
+# copy taxes
+yarn start copy-taxes 'path/to/taxes.csv' SOURCE_API_KEY TARGET_API_KEY
+
 
 #### 3. Copy customers
 
