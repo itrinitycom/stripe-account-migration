@@ -10,10 +10,12 @@ export async function copyCoupons(
 ) {
   const keyMap = new Map();
 
+
+
   // https://stripe.com/docs/api/coupons/list
   for await (const oldCoupon of createStripeClient(
     apiKeyOldAccount
-  ).coupons.list({ limit: 100 })) {
+  ).coupons.list({ limit: 100, expand: ["data.applies_to"]})) {
     if (
       oldCoupon.redeem_by &&
       oldCoupon.redeem_by <= Math.floor(Date.now() / 1000)
@@ -21,7 +23,13 @@ export async function copyCoupons(
       continue;
     }
 
-    const newCoupon = await createStripeClient(apiKeyNewAccount).coupons.create(
+    const newStripeClient = createStripeClient(apiKeyNewAccount);
+
+    // delete already created coupons when you run it again
+    // In case coupon not exists (first run), it will throw exception which we will ignore
+    await newStripeClient.coupons.del(oldCoupon.id).catch(() => {});
+
+    const newCoupon = await newStripeClient.coupons.create(
       sanitizeCoupon(oldCoupon)
     );
 
