@@ -17,9 +17,10 @@ export async function copyPrices(
 
   // https://stripe.com/docs/api/prices/list
   await createStripeClient(apiKeyOldAccount)
-    .prices.list({
+    .prices.search({
       limit: 100,
       expand: ["data.currency_options", "data.tiers"],
+      query: "active:'true'"
     })
     .autoPagingEach(async (oldPrice) => {
       const newProductId = products.get(oldPrice.product as string);
