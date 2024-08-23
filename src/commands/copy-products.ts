@@ -12,13 +12,19 @@ export async function copyProducts(
 
   // https://stripe.com/docs/api/products/list
   await createStripeClient(apiKeyOldAccount)
-    .products.list({ limit: 100 })
+    .products.search({ limit: 100, query: "active:'true'" })
     .autoPagingEach(async (oldProduct) => {
-      const newProduct = await createStripeClient(
-        apiKeyNewAccount
-      ).products.create(sanitizeProduct(oldProduct));
+        const newClient = createStripeClient(apiKeyNewAccount);
 
-      keyMap.set(oldProduct.id, newProduct.id);
+        const product = await newClient.products.retrieve(oldProduct.id);
+        if (product) {
+            keyMap.set(oldProduct.id, product.id);
+            return;
+        }
+
+        const newProduct = await newClient.products.create(sanitizeProduct(oldProduct));
+
+        keyMap.set(oldProduct.id, newProduct.id);
     });
 
   await fs.writeFile(filePath, await mapToCsvString(keyMap));
