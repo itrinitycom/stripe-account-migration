@@ -29,7 +29,11 @@ yarn build
 yarn start copy-products 'path/to/products.csv' SOURCE_API_KEY TARGET_API_KEY
 
 # copy prices
-yarn start copy-prices 'path/to/products.csv' 'path/to/prices.csv' SOURCE_API_KEY TARGET_API_KEY
+# It will iterat through source active products and copy all active prices.
+# It will check if the price already exists (currency and amount) and use it. It create new one in case of not
+# new_prices = list of created prices
+# prices = map of priceIDs
+yarn start copy-prices 'path/to/new_prices.csv' 'path/to/prices.csv' SOURCE_API_KEY TARGET_API_KEY
 
 # copy coupons
 yarn start copy-coupons 'path/to/coupons.csv' SOURCE_API_KEY TARGET_API_KEY

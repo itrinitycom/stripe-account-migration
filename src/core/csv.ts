@@ -30,3 +30,10 @@ export async function csvStringToMap(csv: string) {
     })
   );
 }
+
+export async function arrayToCsvString(data: string[]) {
+  return await stringify(data.map((key) => [key]), {
+    header: false,
+    columns: [{ key: "value", header: "value" }],
+  });
+}
