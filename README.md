@@ -66,6 +66,9 @@ yarn start set-default-payment-method TARGET_API_KEY
 # copy subscriptions to new account and cancel subscriptions in old account
 yarn start copy-subscriptions 'path/to/prices.csv' 'path/to/subscriptions.csv' true SOURCE_API_KEY TARGET_API_KEY
 
+# create csv export of subscriptions for migration toolkit
+yarn start export-subscriptions 'path/to/prices.csv' 'path/to/taxes.csv' 'path/to/subscriptions.csv' SOURCE_API_KEY
+
 ```
 
 ## Subscription Migration

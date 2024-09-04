@@ -1,8 +1,9 @@
 import { stringify as callbackStringify, parse as callbackParse } from "csv";
 import { promisify } from "util";
+import { SubscriptionExportItem } from "../commands/export-subscriptions";
 
 export const stringify = promisify<
-  Array<Array<string>>,
+  Array<Array<string>> | Array<object>,
   { header: boolean; columns: Array<{ key: string; header: string }> },
   string
 >(callbackStringify);
@@ -32,8 +33,56 @@ export async function csvStringToMap(csv: string) {
 }
 
 export async function arrayToCsvString(data: string[]) {
-  return await stringify(data.map((key) => [key]), {
-    header: false,
-    columns: [{ key: "value", header: "value" }],
+  return await stringify(
+    data.map((key) => [key]),
+    {
+      header: false,
+      columns: [{ key: "value", header: "value" }],
+    }
+  );
+}
+
+export async function subscriptionsToCsvString(data: SubscriptionExportItem[]) {
+  let columns = Object.keys(data[0]).map((key) => ({ key, header: key }));
+
+  // Remove the column with key 'metadata'
+  columns = columns.filter(
+    (column) => column.key !== "metadata" && column.key !== "items"
+  );
+
+  columns.push(
+    {
+      key: "metadata.old_subscription_id",
+      header: "metadata.old_subscription_id",
+    },
+    {
+      key: "items.0.price",
+      header: "items.0.price",
+    },
+    {
+      key: "items.0.quantity",
+      header: "items.0.quantity",
+    },
+    {
+      key: "items.1.price",
+      header: "items.1.price",
+    },
+    {
+      key: "items.1.quantity",
+      header: "items.1.quantity",
+    },
+    {
+      key: "items.2.price",
+      header: "items.2.price",
+    },
+    {
+      key: "items.2.quantity",
+      header: "items.2.quantity",
+    }
+  );
+
+  return await stringify(data, {
+    header: true,
+    columns,
   });
 }
