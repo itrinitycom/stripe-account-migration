@@ -29,7 +29,11 @@ yarn build
 yarn start copy-products 'path/to/products.csv' SOURCE_API_KEY TARGET_API_KEY
 
 # copy prices
-yarn start copy-prices 'path/to/products.csv' 'path/to/prices.csv' SOURCE_API_KEY TARGET_API_KEY
+# It will iterat through source active products and copy all active prices.
+# It will check if the price already exists (currency and amount) and use it. It create new one in case of not
+# new_prices = list of created prices
+# prices = map of priceIDs
+yarn start copy-prices 'path/to/new_prices.csv' 'path/to/prices.csv' SOURCE_API_KEY TARGET_API_KEY
 
 # copy coupons
 yarn start copy-coupons 'path/to/coupons.csv' SOURCE_API_KEY TARGET_API_KEY
@@ -61,6 +65,9 @@ yarn start set-default-payment-method TARGET_API_KEY
 
 # copy subscriptions to new account and cancel subscriptions in old account
 yarn start copy-subscriptions 'path/to/prices.csv' 'path/to/subscriptions.csv' true SOURCE_API_KEY TARGET_API_KEY
+
+# create csv export of subscriptions for migration toolkit
+yarn start export-subscriptions 'path/to/prices.csv' 'path/to/taxes.csv' 'path/to/subscriptions.csv' SOURCE_API_KEY
 
 ```
 

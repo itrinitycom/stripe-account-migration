@@ -22,19 +22,23 @@ export function sanitizePrice(
   });
 
   for (const tier of data["tiers"] || []) {
-    delete (tier as any as { flat_amount_decimal?: any })["flat_amount_decimal"];
-    delete (tier as any as { unit_amount_decimal?: any })["unit_amount_decimal"];
+    delete (tier as any as { flat_amount_decimal?: any })[
+      "flat_amount_decimal"
+    ];
+    delete (tier as any as { unit_amount_decimal?: any })[
+      "unit_amount_decimal"
+    ];
     if (tier.up_to === undefined) {
       (tier as any).up_to = "inf";
     }
   }
 
   if (data["currency_options"]) {
-    delete data["currency_options"][data.currency]
+    delete data["currency_options"][data.currency];
   }
 
-  if (data['custom_unit_amount']) {
-    (data['custom_unit_amount'] as any)['enabled'] = true;
+  if (data["custom_unit_amount"]) {
+    (data["custom_unit_amount"] as any)["enabled"] = true;
   }
 
   data["product"] = newProductId;
