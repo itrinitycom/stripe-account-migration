@@ -5,19 +5,10 @@ export function sanitizeSubscription(
   prices: Map<string, string>,
   automaticTax: boolean
 ): Stripe.SubscriptionCreateParams {
-  // set trial period
-  let trialEnd = oldSubscription.current_period_end;
-  if (
-    oldSubscription.trial_end &&
-    oldSubscription.trial_end >= oldSubscription.current_period_end
-  ) {
-    trialEnd = oldSubscription.trial_end;
-  }
-
   // update price ids
   const items: {
-    price: string,
-    quantity: number | undefined,
+    price: string;
+    quantity: number | undefined;
   }[] = [];
   oldSubscription.items.data.forEach((item) => {
     const priceId = prices.get(item.price.id);
@@ -35,6 +26,8 @@ export function sanitizeSubscription(
 
   return {
     customer: oldSubscription.customer,
+    backdate_start_date: oldSubscription.current_period_start,
+    billing_cycle_anchor: oldSubscription.current_period_end,
     items,
     currency: oldSubscription.currency,
     description: oldSubscription.description
@@ -54,6 +47,6 @@ export function sanitizeSubscription(
     },
     pending_invoice_item_interval:
       oldSubscription.pending_invoice_item_interval,
-    trial_end: trialEnd,
+    proration_behavior: "none",
   };
 }
